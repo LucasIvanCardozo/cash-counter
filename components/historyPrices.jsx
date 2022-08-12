@@ -5,7 +5,7 @@ import Prices from './prices';
 const styles = StyleSheet.create({
   container: {
     position: 'absolute',
-    left: 10,
+    left: 20,
     top: 60,
     bottom: 0,
     justifyContent: 'center',

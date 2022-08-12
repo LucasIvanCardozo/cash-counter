@@ -3,24 +3,24 @@ import { useState } from 'react';
 
 const styles = StyleSheet.create({
   contenier: {},
-  text: {
+  amountMoney: {
+    fontSize: 20,
     textAlign: 'right',
-    fontSize: 50,
   },
   header: {
     fontSize: 13,
-    marginBottom: -10,
+    marginBottom: -5,
     color: 'grey',
     textAlign: 'right',
   },
 });
 
-export default CurrentMoney = (props) => {
-  const [currentMoney, setCurrentMoney] = useState(0);
+export default BankMoney = (props) => {
+  const [bankMoney, setbankMoney] = useState(0);
   return (
     <View style={styles.conteiner}>
-      <Text style={styles.header}>WALLET</Text>
-      <Text style={styles.text}>${currentMoney}</Text>
+      <Text style={styles.header}>BANK</Text>
+      <Text style={styles.amountMoney}>${bankMoney}</Text>
     </View>
   );
 };
