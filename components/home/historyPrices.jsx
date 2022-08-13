@@ -1,12 +1,12 @@
 import { StyleSheet, Text, View, FlatList, SafeAreaView } from 'react-native';
-import { prices } from './../data/historyPrices.json';
+import { prices } from '../../data/historyPrices.json';
 import Prices from './prices';
 
 const styles = StyleSheet.create({
   container: {
     position: 'absolute',
     left: 20,
-    top: 60,
+    top: 0,
     bottom: 0,
     justifyContent: 'center',
   },

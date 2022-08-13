@@ -2,16 +2,18 @@ import { Text, View, StyleSheet } from 'react-native';
 import { useState } from 'react';
 
 const styles = StyleSheet.create({
-  contenier: {},
+  conteiner: {
+    marginTop: 5,
+  },
   text: {
-    textAlign: 'right',
     fontSize: 50,
+    textAlign: 'center',
   },
   header: {
     fontSize: 13,
     marginBottom: -10,
     color: 'grey',
-    textAlign: 'right',
+    textAlign: 'center',
   },
 });
 
