@@ -11,7 +11,14 @@ export default function App() {
         <Stack.Screen
           name="Home"
           component={Home}
-          options={{ title: 'Cash Counter' }}
+          options={{
+            title: 'Cash Counter',
+            headerStyle: {
+              backgroundColor: 'orange',
+            },
+            headerTintColor: '#111',
+            headerTitleAlign: 'center',
+          }}
         />
       </Stack.Navigator>
     </NavigationContainer>
