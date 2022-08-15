@@ -1,13 +1,16 @@
 import { Text, View, StyleSheet } from 'react-native';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const styles = StyleSheet.create({
   conteiner: {
     marginTop: 5,
+    justifyContent: 'center',
+  },
+  textConteiner: {
+    alignSelf: 'center',
   },
   text: {
     fontSize: 50,
-    textAlign: 'center',
   },
   header: {
     fontSize: 13,
@@ -15,14 +18,35 @@ const styles = StyleSheet.create({
     color: 'grey',
     textAlign: 'center',
   },
+  footer: {
+    marginTop: -13,
+    marginRight: 5,
+    textAlign: 'right',
+    fontSize: 12,
+  },
+  hidden: {
+    display: 'none',
+  },
 });
 
 export default CurrentMoney = (props) => {
-  const [currentMoney, setCurrentMoney] = useState(0);
+  const [hiddenFooter, setHiddenFooter] = useState(styles.footer);
+
+  useEffect(() => {
+    isNaN(props.currentMoney)
+      ? setHiddenFooter(styles.hidden)
+      : setHiddenFooter(styles.footer);
+  }, [props.currentMoney]);
+
   return (
     <View style={styles.conteiner}>
       <Text style={styles.header}>WALLET</Text>
-      <Text style={styles.text}>${currentMoney}</Text>
+      <View style={styles.textConteiner}>
+        <Text style={styles.text}>${props.currentMoney}</Text>
+        <Text style={hiddenFooter}>
+          (USD {(props.currentMoney / props.dolarBluePrice).toFixed(2)})
+        </Text>
+      </View>
     </View>
   );
 };
