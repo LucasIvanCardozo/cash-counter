@@ -32,6 +32,7 @@ export default InputMoney = (props) => {
         maxLength={10}
         placeholder={props.placeholder}
         onChangeText={props.onChangeText}
+        onEndEditing={props.onEndEditing}
       />
     </SafeAreaView>
   );

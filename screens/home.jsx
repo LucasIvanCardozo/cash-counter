@@ -6,6 +6,8 @@ import {
   Button,
   TouchableHighlight,
   Dimensions,
+  ScrollView,
+  SafeAreaView,
 } from 'react-native';
 import ListButton from '../components/home/listButton';
 import CurrentMoney from '../components/home/currentMoney';
@@ -13,9 +15,13 @@ import BankMoney from '../components/home/bankMoney';
 import Divice from '../components/home/divice';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { CreateContext } from '../createContext';
+import { setData, getData } from '../localStorage/setAndGetFunctions';
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+  },
+  scrollView: {
     flex: 1,
     padding: 20,
     paddingTop: 5,
@@ -63,24 +69,15 @@ const styles = StyleSheet.create({
 export default Home = ({ route, navigation }) => {
   const [eyeIcon, seteyeIcon] = useState('eye');
   const [hiddenMoney, setHiddenMoney] = useState({
-    value: false,
     text: '****',
+    value: false,
   });
   const [dolarBluePrice, setDolarBluePrice] = useState('...');
-  const {
-    bankMoney,
-    bankMoneyUSD,
-    currentMoney,
-  } = useContext(CreateContext);
+  const { bankMoney, bankMoneyUSD, currentMoney, setBankMoney } =
+    useContext(CreateContext);
 
-  const iconToggle = () => {
-    eyeIcon == 'eye'
-      ? (seteyeIcon('eye-slash'),
-        setHiddenMoney({ ...hiddenMoney, value: true }))
-      : (seteyeIcon('eye'), setHiddenMoney({ ...hiddenMoney, value: false }));
-  };
-
-  useLayoutEffect(() => {
+  useEffect(() => {
+    getData('hiddenMoney', setHiddenMoney, true);
     navigation.setOptions({
       headerRight: () => (
         <TouchableHighlight
@@ -92,8 +89,6 @@ export default Home = ({ route, navigation }) => {
         </TouchableHighlight>
       ),
     });
-  });
-  useEffect(() => {
     fetch(`https://api-dolar-argentina.herokuapp.com/api/dolarblue`)
       .then((res) => res.json())
       .then((res) => {
@@ -101,36 +96,44 @@ export default Home = ({ route, navigation }) => {
       });
   }, []);
 
-  return (
-    <View style={styles.container}>
-      <View style={styles.circleBackground}></View>
-      <View style={styles.money}>
-        <TouchableHighlight
-          style={styles.eye}
-          onPress={() => {
-            iconToggle();
-          }}
-          underlayColor={'#ddd4'}
-        >
-          <FontAwesome name={eyeIcon} size={25} color="grey" />
-        </TouchableHighlight>
+  const toggleEye = () => {
+    setData('hiddenMoney', { text: '****', value: !hiddenMoney.value });
+    setHiddenMoney({ text: '****', value: !hiddenMoney.value });
+    eyeIcon == 'eye' ? seteyeIcon('eye-slash') : seteyeIcon('eye');
+  };
 
-        <CurrentMoney
-          dolarBluePrice={dolarBluePrice}
-          currentMoney={currentMoney}
-          hiddenMoney={hiddenMoney}
-        />
-        <BankMoney
-          dolarBluePrice={dolarBluePrice}
-          bankMoney={bankMoney}
-          bankMoneyUSD={bankMoneyUSD}
-          hiddenMoney={hiddenMoney}
-        />
-      </View>
-      <View style={styles.divices}>
-        <Divice name="Dolar Oficial" divice="dolaroficial" />
-        <Divice name="Dolar Blue" divice="dolarblue" />
-      </View>
-    </View>
+  return (
+    <SafeAreaView style={styles.container}>
+      <View style={styles.circleBackground}></View>
+      <ScrollView style={styles.scrollView}>
+        <View style={styles.money}>
+          <TouchableHighlight
+            style={styles.eye}
+            onPress={() => {
+              toggleEye();
+            }}
+            underlayColor={'#ddd4'}
+          >
+            <FontAwesome name={eyeIcon} size={25} color="grey" />
+          </TouchableHighlight>
+
+          <CurrentMoney
+            dolarBluePrice={dolarBluePrice}
+            currentMoney={currentMoney}
+            hiddenMoney={hiddenMoney}
+          />
+          <BankMoney
+            dolarBluePrice={dolarBluePrice}
+            bankMoney={bankMoney}
+            bankMoneyUSD={bankMoneyUSD}
+            hiddenMoney={hiddenMoney}
+          />
+        </View>
+        <View style={styles.divices}>
+          <Divice name="Dolar Oficial" divice="dolaroficial" />
+          <Divice name="Dolar Blue" divice="dolarblue" />
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
