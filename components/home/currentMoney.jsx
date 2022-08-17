@@ -31,21 +31,31 @@ const styles = StyleSheet.create({
 
 export default CurrentMoney = (props) => {
   const [hiddenFooter, setHiddenFooter] = useState(styles.footer);
+  const [currentMoney, setCurrentMoney] = useState(props.currentMoney);
+  const [priceConverter, setPriceConverter] = useState('...');
 
   useEffect(() => {
-    isNaN(props.currentMoney)
-      ? setHiddenFooter(styles.hidden)
-      : setHiddenFooter(styles.footer);
-  }, [props.currentMoney]);
+    props.hiddenMoney.value
+      ? (setCurrentMoney(props.hiddenMoney.text),
+        setHiddenFooter(styles.hidden))
+      : (setCurrentMoney(props.currentMoney), setHiddenFooter(styles.footer));
+  }, [props.hiddenMoney.value]);
+
+  useEffect(() => {
+    if (!isNaN(currentMoney) && currentMoney != props.currentMoney) {
+      setCurrentMoney(props.currentMoney);
+    }
+    if (!isNaN(props.dolarBluePrice)) {
+      setPriceConverter((props.currentMoney / props.dolarBluePrice).toFixed(2));
+    }
+  }, [props.dolarBluePrice, props.currentMoney]);
 
   return (
     <View style={styles.conteiner}>
       <Text style={styles.header}>WALLET</Text>
       <View style={styles.textConteiner}>
-        <Text style={styles.text}>${props.currentMoney}</Text>
-        <Text style={hiddenFooter}>
-          (USD {(props.currentMoney / props.dolarBluePrice).toFixed(2)})
-        </Text>
+        <Text style={styles.text}>${currentMoney}</Text>
+        <Text style={hiddenFooter}>(USD {priceConverter})</Text>
       </View>
     </View>
   );

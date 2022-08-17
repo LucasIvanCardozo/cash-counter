@@ -37,29 +37,46 @@ const styles = StyleSheet.create({
 
 export default BankMoney = (props) => {
   const [hiddenFooter, setHiddenFooter] = useState(styles.footer);
+  const [bankMoneyUSD, setBankMoneyUSD] = useState(props.bankMoneyUSD);
+  const [bankMoney, setBankMoney] = useState(props.bankMoney);
+  const [priceConverterUSD, setPriceConverterUSD] = useState('...');
+  const [priceConverterARS, setPriceConverterARS] = useState('...');
 
   useEffect(() => {
-    isNaN(props.bankMoney)
-      ? setHiddenFooter(styles.hidden)
-      : setHiddenFooter(styles.footer);
-  }, [props.bankMoney]);
+    props.hiddenMoney.value
+      ? (setBankMoney(props.hiddenMoney.text),
+        setBankMoneyUSD(props.hiddenMoney.text),
+        setHiddenFooter(styles.hidden))
+      : (setBankMoney(props.bankMoney),
+        setBankMoneyUSD(props.bankMoneyUSD),
+        setHiddenFooter(styles.footer));
+  }, [props.hiddenMoney.value]);
+
+  useEffect(() => {
+    if (!isNaN(bankMoney) && bankMoney != props.bankMoney) {
+      setBankMoney(props.bankMoney);
+    }
+    if (!isNaN(bankMoneyUSD) && bankMoneyUSD != props.bankMoneyUSD) {
+      setBankMoneyUSD(props.bankMoneyUSD);
+    }
+    if (!isNaN(props.dolarBluePrice)) {
+      setPriceConverterUSD((props.bankMoney / props.dolarBluePrice).toFixed(2));
+      setPriceConverterARS(parseInt(props.bankMoneyUSD * props.dolarBluePrice));
+    }
+  }, [props.dolarBluePrice, props.bankMoneyUSD, props.bankMoney]);
 
   return (
     <View style={styles.conteiner}>
       <Text style={styles.header}>BANK</Text>
       <View style={styles.amountMoneyConteiner}>
         <View>
-          <Text style={styles.amountMoney}>ARS {props.bankMoney}</Text>
-          <Text style={hiddenFooter}>
-            (USD {(props.bankMoney / props.dolarBluePrice).toFixed(2)})
-          </Text>
+          <Text style={styles.amountMoney}>ARS {bankMoney}</Text>
+          <Text style={hiddenFooter}>(USD {priceConverterUSD})</Text>
         </View>
         <View style={styles.amountMoneySeparator}></View>
         <View>
-          <Text style={styles.amountMoney}>USD {props.bankMoneyUSD}</Text>
-          <Text style={hiddenFooter}>
-            (ARS {parseInt(props.bankMoneyUSD * props.dolarBluePrice)})
-          </Text>
+          <Text style={styles.amountMoney}>USD {bankMoneyUSD}</Text>
+          <Text style={hiddenFooter}>(ARS {priceConverterARS})</Text>
         </View>
       </View>
     </View>

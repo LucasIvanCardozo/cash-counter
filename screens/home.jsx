@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useLayoutEffect, useContext } from 'react';
 import {
   StyleSheet,
   Text,
@@ -12,14 +12,16 @@ import CurrentMoney from '../components/home/currentMoney';
 import BankMoney from '../components/home/bankMoney';
 import Divice from '../components/home/divice';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { CreateContext } from '../createContext';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
+    paddingTop: 5,
   },
   circleBackground: {
-    top: -60,
+    top: -80,
     left: -15,
     width: Dimensions.get('window').width + 30,
     height: 150,
@@ -58,30 +60,39 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Home = () => {
-  const [bankMoney, setbankMoney] = useState(120000);
-  const [bankMoneyUSD, setbankMoneyUSD] = useState(1000);
-  const [currentMoney, setCurrentMoney] = useState(6110);
+export default Home = ({ route, navigation }) => {
   const [eyeIcon, seteyeIcon] = useState('eye');
-  const [saveBankMoney, setSaveBankMoney] = useState(0);
-  const [saveBankMoneyUSD, setSaveBankMoneyUSD] = useState(0);
-  const [saveCurrentMoney, setSaveCurrentMoney] = useState(0);
+  const [hiddenMoney, setHiddenMoney] = useState({
+    value: false,
+    text: '****',
+  });
   const [dolarBluePrice, setDolarBluePrice] = useState('...');
+  const {
+    bankMoney,
+    bankMoneyUSD,
+    currentMoney,
+  } = useContext(CreateContext);
+
   const iconToggle = () => {
     eyeIcon == 'eye'
       ? (seteyeIcon('eye-slash'),
-        setSaveBankMoney(bankMoney),
-        setSaveBankMoneyUSD(bankMoneyUSD),
-        setSaveCurrentMoney(currentMoney),
-        setbankMoney('****'),
-        setbankMoneyUSD('****'),
-        setCurrentMoney('****'))
-      : (seteyeIcon('eye'),
-        setbankMoney(saveBankMoney),
-        setbankMoneyUSD(saveBankMoneyUSD),
-        setCurrentMoney(saveCurrentMoney));
+        setHiddenMoney({ ...hiddenMoney, value: true }))
+      : (seteyeIcon('eye'), setHiddenMoney({ ...hiddenMoney, value: false }));
   };
 
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <TouchableHighlight
+          style={{ padding: 5, borderRadius: 20 }}
+          underlayColor={'#ddd4'}
+          onPress={() => navigation.navigate('Config')}
+        >
+          <FontAwesome name={'cog'} size={25} />
+        </TouchableHighlight>
+      ),
+    });
+  });
   useEffect(() => {
     fetch(`https://api-dolar-argentina.herokuapp.com/api/dolarblue`)
       .then((res) => res.json())
@@ -89,6 +100,7 @@ export default Home = () => {
         setDolarBluePrice(parseInt(res.venta));
       });
   }, []);
+
   return (
     <View style={styles.container}>
       <View style={styles.circleBackground}></View>
@@ -98,7 +110,7 @@ export default Home = () => {
           onPress={() => {
             iconToggle();
           }}
-          underlayColor={'#ddd'}
+          underlayColor={'#ddd4'}
         >
           <FontAwesome name={eyeIcon} size={25} color="grey" />
         </TouchableHighlight>
@@ -106,11 +118,13 @@ export default Home = () => {
         <CurrentMoney
           dolarBluePrice={dolarBluePrice}
           currentMoney={currentMoney}
+          hiddenMoney={hiddenMoney}
         />
         <BankMoney
           dolarBluePrice={dolarBluePrice}
           bankMoney={bankMoney}
           bankMoneyUSD={bankMoneyUSD}
+          hiddenMoney={hiddenMoney}
         />
       </View>
       <View style={styles.divices}>
