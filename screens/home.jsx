@@ -1,4 +1,4 @@
-import { useEffect, useState, useLayoutEffect, useContext } from 'react';
+import { useEffect, useState, useLayoutEffect, useContext } from "react";
 import {
   StyleSheet,
   Text,
@@ -8,14 +8,13 @@ import {
   Dimensions,
   ScrollView,
   SafeAreaView,
-} from 'react-native';
-import ListButton from '../components/home/listButton';
-import CurrentMoney from '../components/home/currentMoney';
-import BankMoney from '../components/home/bankMoney';
-import Divice from '../components/home/divice';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import { CreateContext } from '../createContext';
-import { setData, getData } from '../localStorage/setAndGetFunctions';
+} from "react-native";
+import CurrentMoney from "../components/home/currentMoney";
+import BankMoney from "../components/home/bankMoney";
+import Divice from "../components/home/divice";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
+import { CreateContext } from "../createContext";
+import { setData, getData } from "../localStorage/setAndGetFunctions";
 
 const styles = StyleSheet.create({
   container: {
@@ -29,15 +28,15 @@ const styles = StyleSheet.create({
   circleBackground: {
     top: -80,
     left: -15,
-    width: Dimensions.get('window').width + 30,
+    width: Dimensions.get("window").width + 30,
     height: 150,
-    position: 'absolute',
-    backgroundColor: 'orange',
+    position: "absolute",
+    backgroundColor: "orange",
     borderBottomLeftRadius: 50,
     borderBottomRightRadius: 50,
   },
   eye: {
-    position: 'absolute',
+    position: "absolute",
     right: 0,
     top: 0,
     marginRight: 5,
@@ -49,58 +48,67 @@ const styles = StyleSheet.create({
     padding: 10,
     paddingTop: 5,
     paddingBottom: 5,
-    backgroundColor: '#fcfcfc',
-    borderColor: 'orange',
+    backgroundColor: "#fcfcfc",
+    borderColor: "orange",
     borderWidth: 1,
     borderRadius: 10,
   },
   divices: {
     marginTop: 10,
     padding: 5,
-    backgroundColor: '#fcfcfc',
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    borderColor: 'orange',
+    backgroundColor: "#fcfcfc",
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    borderColor: "orange",
     borderWidth: 1,
     borderRadius: 10,
   },
 });
 
 export default Home = ({ route, navigation }) => {
-  const [eyeIcon, seteyeIcon] = useState('eye');
+  const [eyeIcon, seteyeIcon] = useState("eye");
   const [hiddenMoney, setHiddenMoney] = useState({
-    text: '****',
+    text: "****",
     value: false,
   });
-  const [dolarBluePrice, setDolarBluePrice] = useState('...');
-  const { bankMoney, bankMoneyUSD, currentMoney, setBankMoney } =
-    useContext(CreateContext);
+  const [dolarBluePrice, setDolarBluePrice] = useState("...");
+  const { bankMoney, bankMoneyUSD, currentMoney } = useContext(CreateContext);
 
-  useEffect(() => {
-    getData('hiddenMoney', setHiddenMoney, true);
+  //Tomar valores iniciales si estan en el localStorage
+  const initValues = async () => {
+    const initHiddenMoney = await getData("hiddenMoney", true);
+    console.log(initHiddenMoney);
+    initHiddenMoney.value ? toggleEye() : null;
+  };
+
+  //Cambiar modo oculto y guardar estado en localStorage
+  const toggleEye = () => {
+    setData("hiddenMoney", { text: "****", value: !hiddenMoney.value });
+    setHiddenMoney({ text: "****", value: !hiddenMoney.value });
+    eyeIcon == "eye" ? seteyeIcon("eye-slash") : seteyeIcon("eye");
+  };
+
+  useLayoutEffect(() => {
+    initValues();
+    //Crear icono de configuracion con su funcion
     navigation.setOptions({
       headerRight: () => (
         <TouchableHighlight
           style={{ padding: 5, borderRadius: 20 }}
-          underlayColor={'#ddd4'}
-          onPress={() => navigation.navigate('Config')}
+          underlayColor={"#ddd4"}
+          onPress={() => navigation.navigate("Config")}
         >
-          <FontAwesome name={'cog'} size={25} />
+          <FontAwesome name={"cog"} size={25} />
         </TouchableHighlight>
       ),
     });
+    //Tomar valor del dolar actual
     fetch(`https://api-dolar-argentina.herokuapp.com/api/dolarblue`)
       .then((res) => res.json())
       .then((res) => {
         setDolarBluePrice(parseInt(res.venta));
       });
   }, []);
-
-  const toggleEye = () => {
-    setData('hiddenMoney', { text: '****', value: !hiddenMoney.value });
-    setHiddenMoney({ text: '****', value: !hiddenMoney.value });
-    eyeIcon == 'eye' ? seteyeIcon('eye-slash') : seteyeIcon('eye');
-  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -112,7 +120,7 @@ export default Home = ({ route, navigation }) => {
             onPress={() => {
               toggleEye();
             }}
-            underlayColor={'#ddd4'}
+            underlayColor={"#ddd4"}
           >
             <FontAwesome name={eyeIcon} size={25} color="grey" />
           </TouchableHighlight>

@@ -1,38 +1,46 @@
-import { Text, View, StyleSheet } from 'react-native';
-import { useState, useEffect } from 'react';
+import { Text, View, StyleSheet } from "react-native";
+import { useState, useEffect } from "react";
 
 const styles = StyleSheet.create({
   conteiner: {
     marginTop: 5,
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   textConteiner: {
-    alignSelf: 'center',
+    alignSelf: "center",
+    overflow: "hidden",
+  },
+  chargeView: {
+    position: "absolute",
+    height: 100,
+    width: 100,
+    backgroundColor: "#4444",
+    borderRadius: 15,
   },
   text: {
     fontSize: 50,
+    marginTop: -8,
+    marginBottom: -8,
   },
   header: {
     fontSize: 13,
-    marginBottom: -10,
-    color: 'grey',
-    textAlign: 'center',
+    color: "grey",
+    textAlign: "center",
   },
   footer: {
-    marginTop: -13,
     marginRight: 5,
-    textAlign: 'right',
+    textAlign: "right",
     fontSize: 12,
   },
   hidden: {
-    display: 'none',
+    display: "none",
   },
 });
 
 export default CurrentMoney = (props) => {
   const [hiddenFooter, setHiddenFooter] = useState(styles.footer);
   const [currentMoney, setCurrentMoney] = useState(props.currentMoney);
-  const [priceConverter, setPriceConverter] = useState('...');
+  const [priceConverter, setPriceConverter] = useState("...");
 
   useEffect(() => {
     props.hiddenMoney.value
@@ -56,6 +64,7 @@ export default CurrentMoney = (props) => {
       <View style={styles.textConteiner}>
         <Text style={styles.text}>${currentMoney}</Text>
         <Text style={hiddenFooter}>(USD {priceConverter})</Text>
+        <View style={styles.chargeView}></View>
       </View>
     </View>
   );

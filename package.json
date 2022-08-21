@@ -27,12 +27,26 @@
     "react-native-screens": "~3.11.1",
     "react-native-vector-icons": "^9.2.0",
     "react-native-web": "0.17.7",
-    "@react-native-async-storage/async-storage": "~1.17.3"
+    "@react-native-async-storage/async-storage": "~1.17.3",
+    "expo-system-ui": "~1.2.0",
+    "expo-splash-screen": "~0.15.1",
+    "expo-dev-client": "~1.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
     "@types/react": "^18.0.17",
     "@types/react-native": "^0.69.5"
   },
-  "private": true
+  "private": true,
+  "description": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jodkas/cash-counter.git"
+  },
+  "author": "lucas cardozo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Jodkas/cash-counter/issues"
+  },
+  "homepage": "https://github.com/Jodkas/cash-counter#readme"
 }

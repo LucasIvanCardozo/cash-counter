@@ -1,21 +1,29 @@
-import { useState, createContext, useEffect } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Home from './screens/home';
-import Config from './screens/config';
-import { CreateContext } from './createContext';
-import { getData, setData } from './localStorage/setAndGetFunctions';
+import { useState, createContext, useEffect, useLayoutEffect } from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import Home from "./screens/home";
+import Config from "./screens/config";
+import { CreateContext } from "./createContext";
+import { getData } from "./localStorage/setAndGetFunctions";
 
 const Stack = createNativeStackNavigator();
+
 export default function App() {
   const [bankMoney, setBankMoney] = useState(0);
   const [bankMoneyUSD, setBankMoneyUSD] = useState(0);
   const [currentMoney, setCurrentMoney] = useState(0);
 
-  useEffect(() => {
-    getData('bankMoney', setBankMoney);
-    getData('bankMoneyUSD', setBankMoneyUSD);
-    getData('currentMoney', setCurrentMoney);
+  const initValues = async () => {
+    const initBankMoney = await getData("bankMoney");
+    const initBankMoneyUSD = await getData("bankMoneyUSD");
+    const initCurrentMoney = await getData("currentMoney");
+    setBankMoney(initBankMoney);
+    setBankMoneyUSD(initBankMoneyUSD);
+    setCurrentMoney(initCurrentMoney);
+  };
+
+  useLayoutEffect(() => {
+    initValues();
   }, []);
 
   return (
@@ -35,11 +43,11 @@ export default function App() {
             name="Home"
             component={Home}
             options={{
-              title: 'Cash Counter',
+              title: "Cash Counter",
               headerStyle: {
-                backgroundColor: 'orange',
+                backgroundColor: "orange",
               },
-              headerTitleAlign: 'center',
+              headerTitleAlign: "center",
               headerShadowVisible: false,
             }}
           />
@@ -47,9 +55,9 @@ export default function App() {
             name="Config"
             component={Config}
             options={{
-              title: 'Configuration',
+              title: "Configuration",
               headerStyle: {
-                backgroundColor: 'orange',
+                backgroundColor: "orange",
               },
             }}
           />

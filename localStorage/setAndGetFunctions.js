@@ -1,4 +1,5 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 const setData = async (name, value) => {
   try {
     value instanceof Object
@@ -13,18 +14,22 @@ const setData = async (name, value) => {
     console.log(e);
   }
 };
-const getData = async (name, setFunction, json) => {
+
+const getData = async (name, validJson) => {
   try {
     const value = await AsyncStorage.getItem(name);
-    let jsonValue;
-    value != null
-      ? (json === true
-          ? ((jsonValue = JSON.parse(value)), setFunction(jsonValue))
-          : setFunction(value),
-        console.log(
-          `\x1B[38;5;223m\x1B[1mGetData\x1B[22m "${name}: ${value}" complete\x1B[39m`
-        ))
-      : console.log(`No se encontró "${name}"`);
+    if (value != null) {
+      console.log(
+        `\x1B[38;5;223m\x1B[1mGetData\x1B[22m "${name}: ${value}" complete\x1B[39m`
+      );
+      if (validJson) {
+        return JSON.parse(value);
+      } else {
+        return value;
+      }
+    } else {
+      console.log(`No se encontró "${name}"`);
+    }
   } catch (e) {
     console.log(e);
   }
