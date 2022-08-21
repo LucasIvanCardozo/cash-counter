@@ -77,7 +77,6 @@ export default Home = ({ route, navigation }) => {
   //Tomar valores iniciales si estan en el localStorage
   const initValues = async () => {
     const initHiddenMoney = await getData("hiddenMoney", true);
-    console.log(initHiddenMoney);
     initHiddenMoney.value ? toggleEye() : null;
   };
 

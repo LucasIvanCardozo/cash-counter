@@ -1,12 +1,13 @@
-import { useContext, useEffect, useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import InputMoney from '../components/config/inputMoney';
-import { CreateContext } from '../createContext';
-import { setData } from '../localStorage/setAndGetFunctions';
+import { useContext, useEffect, useState } from "react";
+import { View, Text, StyleSheet, ToastAndroid } from "react-native";
+import InputMoney from "../components/config/inputMoney";
+import { CreateContext } from "../createContext";
+import { setData } from "../localStorage/setAndGetFunctions";
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    padding: 10,
   },
 });
 
@@ -22,25 +23,48 @@ export default Config = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <InputMoney
-        title={'Wallet'}
-        currentMoney={`(current: $${currentMoney})`}
-        placeholder="Change the money in the wallet"
+        title={"Wallet"}
+        placeholder={`current: $${currentMoney}`}
         onChangeText={(text) => setCurrentMoney(text)}
-        onEndEditing={() => setData('currentMoney', currentMoney)}
+        onEndEditing={() => {
+          currentMoney
+            ? (setData("currentMoney", currentMoney),
+              ToastAndroid.show(
+                `${currentMoney} pesos guardados`,
+                ToastAndroid.SHORT
+              ))
+            : null;
+        }}
       />
       <InputMoney
         title="Bank in ARS"
-        currentMoney={`(current: $${bankMoney})`}
-        placeholder="Change the money in the bank"
-        onChangeText={(text) => setBankMoney(text)}
-        onEndEditing={() => setData('bankMoney', bankMoney)}
+        placeholder={`current: $${bankMoney}`}
+        onChangeText={(text) => {
+          setBankMoney(text);
+        }}
+        onEndEditing={() => {
+          bankMoney
+            ? (setData("bankMoney", bankMoney),
+              ToastAndroid.show(
+                `${bankMoney} pesos guardados`,
+                ToastAndroid.SHORT
+              ))
+            : null;
+        }}
       />
       <InputMoney
         title="Bank in USD"
-        currentMoney={`(current: $${bankMoneyUSD})`}
-        placeholder="Change the money in the bank"
+        placeholder={`current: $${bankMoneyUSD}`}
         onChangeText={(text) => setBankMoneyUSD(text)}
-        onEndEditing={() => setData('bankMoneyUSD', bankMoneyUSD)}
+        onEndEditing={() => {
+          bankMoneyUSD
+            ? (setData("bankMoneyUSD", bankMoneyUSD),
+              ToastAndroid.show(
+                `${bankMoneyUSD} dolares guardados`,
+                ToastAndroid.SHORT
+              ))
+            : null;
+        }}
       />
     </View>
   );

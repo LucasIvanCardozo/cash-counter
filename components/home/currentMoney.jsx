@@ -10,13 +10,6 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     overflow: "hidden",
   },
-  chargeView: {
-    position: "absolute",
-    height: 100,
-    width: 100,
-    backgroundColor: "#4444",
-    borderRadius: 15,
-  },
   text: {
     fontSize: 50,
     marginTop: -8,
@@ -64,7 +57,6 @@ export default CurrentMoney = (props) => {
       <View style={styles.textConteiner}>
         <Text style={styles.text}>${currentMoney}</Text>
         <Text style={hiddenFooter}>(USD {priceConverter})</Text>
-        <View style={styles.chargeView}></View>
       </View>
     </View>
   );
