@@ -77,7 +77,11 @@ export default Home = ({ route, navigation }) => {
   //Tomar valores iniciales si estan en el localStorage
   const initValues = async () => {
     const initHiddenMoney = await getData("hiddenMoney", true);
-    initHiddenMoney.value ? toggleEye() : null;
+    initHiddenMoney !== undefined
+      ? initHiddenMoney.value
+        ? toggleEye()
+        : null
+      : null;
   };
 
   //Cambiar modo oculto y guardar estado en localStorage

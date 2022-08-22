@@ -17,9 +17,9 @@ export default function App() {
     const initBankMoney = await getData("bankMoney");
     const initBankMoneyUSD = await getData("bankMoneyUSD");
     const initCurrentMoney = await getData("currentMoney");
-    setBankMoney(initBankMoney);
-    setBankMoneyUSD(initBankMoneyUSD);
-    setCurrentMoney(initCurrentMoney);
+    initBankMoney ? setBankMoney(initBankMoney) : null;
+    initBankMoneyUSD ? setBankMoneyUSD(initBankMoneyUSD) : null;
+    initCurrentMoney ? setCurrentMoney(initCurrentMoney) : null;
   };
 
   useLayoutEffect(() => {
