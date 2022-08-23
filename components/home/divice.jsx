@@ -55,16 +55,16 @@ export default Divice = (props) => {
               : saleDif < 0
               ? (setDiviceSalePrevious(`▼${saleDif * -1}`),
                 setStyleSale({ color: 'red' }))
-              : (setDiviceSalePrevious(`${saleDif}`),
-                setStyleSale({ color: 'green' }));
+              : (setDiviceSalePrevious(` -${saleDif}`),
+                setStyleSale({ color: 'grey' }));
             purchaseDif > 0
               ? (setDivicePurchasePrevious(`▲${purchaseDif}`),
                 setStylePurchase({ color: 'green' }))
               : purchaseDif < 0
               ? (setDivicePurchasePrevious(`▼${purchaseDif * -1}`),
                 setStylePurchase({ color: 'red' }))
-              : (setDivicePurchasePrevious(`${purchaseDif}`),
-                setStylePurchase({ color: 'green' }));
+              : (setDivicePurchasePrevious(` -${purchaseDif}`),
+                setStylePurchase({ color: 'grey' }));
           });
       });
   }, []);

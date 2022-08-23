@@ -8,6 +8,9 @@ import {
   Dimensions,
   ScrollView,
   SafeAreaView,
+  Modal,
+  TextInput,
+  ToastAndroid,
 } from 'react-native';
 import CurrentMoney from '../components/home/currentMoney';
 import BankMoney from '../components/home/bankMoney';
@@ -63,6 +66,26 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 10,
   },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalConteiner: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
 });
 
 export default Home = ({ route, navigation }) => {
@@ -72,7 +95,16 @@ export default Home = ({ route, navigation }) => {
     value: false,
   });
   const [dolarBluePrice, setDolarBluePrice] = useState('...');
-  const { bankMoney, bankMoneyUSD, currentMoney } = useContext(CreateContext);
+  const {
+    bankMoney,
+    bankMoneyUSD,
+    currentMoney,
+    setBankMoney,
+    setBankMoneyUSD,
+    setCurrentMoney,
+  } = useContext(CreateContext);
+  const [modalExtractVisible, setModalExtractVisible] = useState(false);
+  const [coins, setCoins] = useState(0);
 
   //Tomar valores iniciales si estan en el localStorage
   const initValues = async () => {
@@ -153,6 +185,41 @@ export default Home = ({ route, navigation }) => {
           />
         </View>
       </ScrollView>
+      <Button title="Extract" onPress={() => setModalExtractVisible(true)} />
+      <Modal
+        animationType="fade"
+        visible={modalExtractVisible}
+        transparent={true}
+        onRequestClose={() => setModalExtractVisible(false)}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalConteiner}>
+            <Text>Hola</Text>
+            <TextInput
+              keyboardType="numeric"
+              maxLength={10}
+              placeholder={'how much to extract?'}
+              onChangeText={(text) => setCoins(text)}
+            />
+            <Button
+              title="Extract"
+              onPress={() => {
+                if (coins > 0) {
+                  setData('currentMoney', (currentMoney - coins).toString());
+                  setCurrentMoney((currentMoney - coins).toString());
+                  setCoins(0);
+                  setModalExtractVisible(false);
+                } else {
+                  ToastAndroid.show(
+                    'Monto de dinero inválido',
+                    ToastAndroid.SHORT
+                  );
+                }
+              }}
+            />
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 };
