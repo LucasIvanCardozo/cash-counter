@@ -1,4 +1,4 @@
-import { useEffect, useState, useLayoutEffect, useContext } from 'react';
+import { useEffect, useState, useLayoutEffect, useContext } from "react";
 import {
   StyleSheet,
   Text,
@@ -11,13 +11,13 @@ import {
   Modal,
   TextInput,
   ToastAndroid,
-} from 'react-native';
-import CurrentMoney from '../components/home/currentMoney';
-import BankMoney from '../components/home/bankMoney';
-import Divice from '../components/home/divice';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import { CreateContext } from '../createContext';
-import { setData, getData } from '../localStorage/setAndGetFunctions';
+} from "react-native";
+import CurrentMoney from "../components/home/currentMoney";
+import BankMoney from "../components/home/bankMoney";
+import Divice from "../components/home/divice";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
+import { CreateContext } from "../createContext";
+import { setData, getData } from "../localStorage/setAndGetFunctions";
 
 const styles = StyleSheet.create({
   container: {
@@ -31,15 +31,15 @@ const styles = StyleSheet.create({
   circleBackground: {
     top: -80,
     left: -15,
-    width: Dimensions.get('window').width + 30,
+    width: Dimensions.get("window").width + 30,
     height: 150,
-    position: 'absolute',
-    backgroundColor: 'orange',
+    position: "absolute",
+    backgroundColor: "orange",
     borderBottomLeftRadius: 50,
     borderBottomRightRadius: 50,
   },
   eye: {
-    position: 'absolute',
+    position: "absolute",
     right: 0,
     top: 0,
     marginRight: 5,
@@ -51,33 +51,33 @@ const styles = StyleSheet.create({
     padding: 10,
     paddingTop: 5,
     paddingBottom: 5,
-    backgroundColor: '#fcfcfc',
-    borderColor: 'orange',
+    backgroundColor: "#fcfcfc",
+    borderColor: "orange",
     borderWidth: 1,
     borderRadius: 10,
   },
   divices: {
     marginTop: 10,
     padding: 5,
-    backgroundColor: '#fcfcfc',
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    borderColor: 'orange',
+    backgroundColor: "#fcfcfc",
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    borderColor: "orange",
     borderWidth: 1,
     borderRadius: 10,
   },
   centeredView: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   modalConteiner: {
     margin: 20,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 20,
     padding: 35,
-    alignItems: 'center',
-    shadowColor: '#000',
+    alignItems: "center",
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 2,
@@ -89,12 +89,12 @@ const styles = StyleSheet.create({
 });
 
 export default Home = ({ route, navigation }) => {
-  const [eyeIcon, seteyeIcon] = useState('eye');
+  const [eyeIcon, seteyeIcon] = useState("eye");
   const [hiddenMoney, setHiddenMoney] = useState({
-    text: '****',
+    text: "****",
     value: false,
   });
-  const [dolarBluePrice, setDolarBluePrice] = useState('...');
+  const [dolarBluePrice, setDolarBluePrice] = useState("...");
   const {
     bankMoney,
     bankMoneyUSD,
@@ -108,7 +108,7 @@ export default Home = ({ route, navigation }) => {
 
   //Tomar valores iniciales si estan en el localStorage
   const initValues = async () => {
-    const initHiddenMoney = await getData('hiddenMoney', true);
+    const initHiddenMoney = await getData("hiddenMoney", true);
     initHiddenMoney !== undefined
       ? initHiddenMoney.value
         ? toggleEye()
@@ -118,9 +118,9 @@ export default Home = ({ route, navigation }) => {
 
   //Cambiar modo oculto y guardar estado en localStorage
   const toggleEye = () => {
-    setData('hiddenMoney', { text: '****', value: !hiddenMoney.value });
-    setHiddenMoney({ text: '****', value: !hiddenMoney.value });
-    eyeIcon == 'eye' ? seteyeIcon('eye-slash') : seteyeIcon('eye');
+    setData("hiddenMoney", { text: "****", value: !hiddenMoney.value });
+    setHiddenMoney({ text: "****", value: !hiddenMoney.value });
+    eyeIcon == "eye" ? seteyeIcon("eye-slash") : seteyeIcon("eye");
   };
 
   useLayoutEffect(() => {
@@ -130,10 +130,10 @@ export default Home = ({ route, navigation }) => {
       headerRight: () => (
         <TouchableHighlight
           style={{ padding: 5, borderRadius: 20 }}
-          underlayColor={'#ddd4'}
-          onPress={() => navigation.navigate('Config')}
+          underlayColor={"#ddd4"}
+          onPress={() => navigation.navigate("Config")}
         >
-          <FontAwesome name={'cog'} size={25} />
+          <FontAwesome name={"cog"} size={25} />
         </TouchableHighlight>
       ),
     });
@@ -155,7 +155,7 @@ export default Home = ({ route, navigation }) => {
             onPress={() => {
               toggleEye();
             }}
-            underlayColor={'#ddd4'}
+            underlayColor={"#ddd4"}
           >
             <FontAwesome name={eyeIcon} size={25} color="grey" />
           </TouchableHighlight>
@@ -173,16 +173,8 @@ export default Home = ({ route, navigation }) => {
           />
         </View>
         <View style={styles.divices}>
-          <Divice
-            name="Dolar Oficial"
-            divice="dolaroficial"
-            divicePrevious="oficial"
-          />
-          <Divice
-            name="Dolar Blue"
-            divice="dolarblue"
-            divicePrevious="informal"
-          />
+          <Divice name="Dolar Oficial" divice="Oficial" />
+          <Divice name="Dolar Blue" divice="Blue" />
         </View>
       </ScrollView>
       <Button title="Extract" onPress={() => setModalExtractVisible(true)} />
@@ -198,20 +190,20 @@ export default Home = ({ route, navigation }) => {
             <TextInput
               keyboardType="numeric"
               maxLength={10}
-              placeholder={'how much to extract?'}
+              placeholder={"how much to extract?"}
               onChangeText={(text) => setCoins(text)}
             />
             <Button
               title="Extract"
               onPress={() => {
                 if (coins > 0) {
-                  setData('currentMoney', (currentMoney - coins).toString());
+                  setData("currentMoney", (currentMoney - coins).toString());
                   setCurrentMoney((currentMoney - coins).toString());
                   setCoins(0);
                   setModalExtractVisible(false);
                 } else {
                   ToastAndroid.show(
-                    'Monto de dinero inválido',
+                    "Monto de dinero inválido",
                     ToastAndroid.SHORT
                   );
                 }

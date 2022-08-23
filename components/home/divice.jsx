@@ -1,71 +1,64 @@
-import { useState, useEffect } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { useState, useEffect } from "react";
+import { Text, View, StyleSheet } from "react-native";
 
 const style = StyleSheet.create({
   conteiner: {
     borderRadius: 10,
   },
   header: {
-    fontWeight: 'bold',
-    textAlign: 'center',
+    fontWeight: "bold",
+    textAlign: "center",
   },
   diviceConteiner: {
-    flexDirection: 'row',
+    flexDirection: "row",
   },
   saleAndPurchaseConteiner: {
     marginLeft: 5,
     marginRight: 5,
-    alignItems: 'center',
+    alignItems: "center",
   },
 });
 
 export default Divice = (props) => {
-  const [diviceSale, setDiviceSale] = useState('...');
-  const [divicePurchase, setDivicePurchase] = useState('...');
-  const [diviceSalePrevious, setDiviceSalePrevious] = useState('0');
-  const [divicePurchasePrevious, setDivicePurchasePrevious] = useState('0');
-  const [styleSale, setStyleSale] = useState({ display: 'none' });
-  const [stylePurchase, setStylePurchase] = useState({ display: 'none' });
+  const [diviceSale, setDiviceSale] = useState("...");
+  const [divicePurchase, setDivicePurchase] = useState("...");
+  const [diviceSalePrevious, setDiviceSalePrevious] = useState("0");
+  const [divicePurchasePrevious, setDivicePurchasePrevious] = useState("0");
+  const [styleSale, setStyleSale] = useState({ display: "none" });
+  const [stylePurchase, setStylePurchase] = useState({ display: "none" });
 
   useEffect(() => {
-    const currentDay = `${new Date().getDate()}-${
-      new Date().getMonth() + 1
-    }-${new Date().getFullYear()}`;
-    const previousDay = `${new Date(
-      new Date().getTime() - 432000000
-    ).getDate()}-${
-      new Date(new Date().getTime() - 432000000).getMonth() + 1
-    }-${new Date(new Date().getTime() - 432000000).getFullYear()}`;
-
-    fetch(`https://api-dolar-argentina.herokuapp.com/api/${props.divice}`)
-      .then((res) => res.json())
+    fetch("https://api.bluelytics.com.ar/v2/evolution.json?days=4")
+      .then((res) => (res = res.json()))
       .then((res) => {
-        setDiviceSale(parseInt(res.venta));
-        setDivicePurchase(parseInt(res.compra));
-        fetch(
-          `https://mercados.ambito.com//dolar/${props.divicePrevious}/historico-general/${previousDay}/${currentDay}`
-        )
-          .then((e) => e.json())
-          .then((e) => {
-            const saleDif = parseInt(res.venta) - parseInt(e[1][2]);
-            const purchaseDif = parseInt(res.compra) - parseInt(e[1][1]);
-            saleDif > 0
-              ? (setDiviceSalePrevious(`▲${saleDif}`),
-                setStyleSale({ color: 'green' }))
-              : saleDif < 0
-              ? (setDiviceSalePrevious(`▼${saleDif * -1}`),
-                setStyleSale({ color: 'red' }))
-              : (setDiviceSalePrevious(` -${saleDif}`),
-                setStyleSale({ color: 'grey' }));
-            purchaseDif > 0
-              ? (setDivicePurchasePrevious(`▲${purchaseDif}`),
-                setStylePurchase({ color: 'green' }))
-              : purchaseDif < 0
-              ? (setDivicePurchasePrevious(`▼${purchaseDif * -1}`),
-                setStylePurchase({ color: 'red' }))
-              : (setDivicePurchasePrevious(` -${purchaseDif}`),
-                setStylePurchase({ color: 'grey' }));
-          });
+        const arrayDivice = res.filter((obj) => obj.source == props.divice);
+
+        setDiviceSale(parseInt(arrayDivice[0].value_sell));
+        setDivicePurchase(parseInt(arrayDivice[0].value_buy));
+        const arrayBuy = arrayDivice.map(function (obj) {
+          return parseInt(obj.value_buy);
+        });
+        const arraySell = arrayDivice.map(function (obj) {
+          return parseInt(obj.value_sell);
+        });
+        const buyDiference = arrayBuy[0] - arrayBuy[1];
+        const sellDiference = arraySell[0] - arraySell[1];
+        sellDiference > 0
+          ? (setDiviceSalePrevious(`▲${sellDiference}`),
+            setStyleSale({ color: "green" }))
+          : sellDiference < 0
+          ? (setDiviceSalePrevious(`▼${sellDiference * -1}`),
+            setStyleSale({ color: "red" }))
+          : (setDiviceSalePrevious(` -${sellDiference}`),
+            setStyleSale({ color: "grey" }));
+        buyDiference > 0
+          ? (setDivicePurchasePrevious(`▲${buyDiference}`),
+            setStylePurchase({ color: "green" }))
+          : buyDiference < 0
+          ? (setDivicePurchasePrevious(`▼${buyDiference * -1}`),
+            setStylePurchase({ color: "red" }))
+          : (setDivicePurchasePrevious(` -${buyDiference}`),
+            setStylePurchase({ color: "grey" }));
       });
   }, []);
 
@@ -75,14 +68,14 @@ export default Divice = (props) => {
       <View style={style.diviceConteiner}>
         <View style={style.saleAndPurchaseConteiner}>
           <Text>Buy</Text>
-          <View style={{ flexDirection: 'row' }}>
+          <View style={{ flexDirection: "row" }}>
             <Text>{divicePurchase}</Text>
             <Text style={styleSale}>{diviceSalePrevious}</Text>
           </View>
         </View>
         <View style={style.saleAndPurchaseConteiner}>
-          <Text>Sale</Text>
-          <View style={{ flexDirection: 'row' }}>
+          <Text>Sell</Text>
+          <View style={{ flexDirection: "row" }}>
             <Text>{diviceSale}</Text>
             <Text style={stylePurchase}>{divicePurchasePrevious}</Text>
           </View>
