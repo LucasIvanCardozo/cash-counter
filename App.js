@@ -17,6 +17,11 @@ export default function App() {
     const initBankMoney = await getData("bankMoney");
     const initBankMoneyUSD = await getData("bankMoneyUSD");
     const initCurrentMoney = await getData("currentMoney");
+    const diaActual = `${new Date().getDate()}-${new Date().getMonth()}-${new Date().getFullYear()}`;
+    const diaAnteriorSegundos = new Date().getTime() - 432000000;
+    const diaAnterior = `${new Date(diaAnteriorSegundos).getDate()}-${new Date(
+      diaAnteriorSegundos
+    ).getMonth()}-${new Date(diaAnteriorSegundos).getFullYear()}`;
     initBankMoney ? setBankMoney(initBankMoney) : null;
     initBankMoneyUSD ? setBankMoneyUSD(initBankMoneyUSD) : null;
     initCurrentMoney ? setCurrentMoney(initCurrentMoney) : null;
