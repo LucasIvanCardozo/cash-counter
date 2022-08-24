@@ -1,34 +1,34 @@
-import { useState, useEffect } from "react";
-import { Text, View, StyleSheet } from "react-native";
+import { useState, useEffect } from 'react';
+import { Text, View, StyleSheet } from 'react-native';
 
 const style = StyleSheet.create({
   conteiner: {
     borderRadius: 10,
   },
   header: {
-    fontWeight: "bold",
-    textAlign: "center",
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
   diviceConteiner: {
-    flexDirection: "row",
+    flexDirection: 'row',
   },
   saleAndPurchaseConteiner: {
     marginLeft: 5,
     marginRight: 5,
-    alignItems: "center",
+    alignItems: 'center',
   },
 });
 
 export default Divice = (props) => {
-  const [diviceSale, setDiviceSale] = useState("...");
-  const [divicePurchase, setDivicePurchase] = useState("...");
-  const [diviceSalePrevious, setDiviceSalePrevious] = useState("0");
-  const [divicePurchasePrevious, setDivicePurchasePrevious] = useState("0");
-  const [styleSale, setStyleSale] = useState({ display: "none" });
-  const [stylePurchase, setStylePurchase] = useState({ display: "none" });
+  const [diviceSale, setDiviceSale] = useState('...');
+  const [divicePurchase, setDivicePurchase] = useState('...');
+  const [diviceSalePrevious, setDiviceSalePrevious] = useState('0');
+  const [divicePurchasePrevious, setDivicePurchasePrevious] = useState('0');
+  const [styleSale, setStyleSale] = useState({ display: 'none' });
+  const [stylePurchase, setStylePurchase] = useState({ display: 'none' });
 
   useEffect(() => {
-    fetch("https://api.bluelytics.com.ar/v2/evolution.json?days=4")
+    fetch('https://api.bluelytics.com.ar/v2/evolution.json?days=4')
       .then((res) => (res = res.json()))
       .then((res) => {
         const arrayDivice = res.filter((obj) => obj.source == props.divice);
@@ -45,20 +45,20 @@ export default Divice = (props) => {
         const sellDiference = arraySell[0] - arraySell[1];
         sellDiference > 0
           ? (setDiviceSalePrevious(`▲${sellDiference}`),
-            setStyleSale({ color: "green" }))
+            setStyleSale({ color: 'green' }))
           : sellDiference < 0
           ? (setDiviceSalePrevious(`▼${sellDiference * -1}`),
-            setStyleSale({ color: "red" }))
+            setStyleSale({ color: 'red' }))
           : (setDiviceSalePrevious(` -${sellDiference}`),
-            setStyleSale({ color: "grey" }));
+            setStyleSale({ color: 'grey' }));
         buyDiference > 0
           ? (setDivicePurchasePrevious(`▲${buyDiference}`),
-            setStylePurchase({ color: "green" }))
+            setStylePurchase({ color: 'green' }))
           : buyDiference < 0
           ? (setDivicePurchasePrevious(`▼${buyDiference * -1}`),
-            setStylePurchase({ color: "red" }))
+            setStylePurchase({ color: 'red' }))
           : (setDivicePurchasePrevious(` -${buyDiference}`),
-            setStylePurchase({ color: "grey" }));
+            setStylePurchase({ color: 'grey' }));
       });
   }, []);
 
@@ -68,14 +68,14 @@ export default Divice = (props) => {
       <View style={style.diviceConteiner}>
         <View style={style.saleAndPurchaseConteiner}>
           <Text>Buy</Text>
-          <View style={{ flexDirection: "row" }}>
+          <View style={{ flexDirection: 'row' }}>
             <Text>{divicePurchase}</Text>
             <Text style={styleSale}>{diviceSalePrevious}</Text>
           </View>
         </View>
         <View style={style.saleAndPurchaseConteiner}>
           <Text>Sell</Text>
-          <View style={{ flexDirection: "row" }}>
+          <View style={{ flexDirection: 'row' }}>
             <Text>{diviceSale}</Text>
             <Text style={stylePurchase}>{divicePurchasePrevious}</Text>
           </View>
