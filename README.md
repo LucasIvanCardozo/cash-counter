@@ -1,3 +1,3 @@
 # cash-counter
 
-<img src="./Media/Images/screenHome.jpeg" alt="Screen del Home"/>
+<img  src="./Media/Images/screenHome.jpg" alt="Screen del Home"/>
