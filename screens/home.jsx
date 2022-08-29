@@ -18,6 +18,7 @@ import Divice from "../components/home/divice";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { CreateContext } from "../createContext";
 import { setData, getData } from "../localStorage/setAndGetFunctions";
+import BoxCategory from "../components/home/boxCategory";
 
 const styles = StyleSheet.create({
   container: {
@@ -34,7 +35,7 @@ const styles = StyleSheet.create({
     width: Dimensions.get("window").width + 30,
     height: 150,
     position: "absolute",
-    backgroundColor: "orange",
+    backgroundColor: "#4db853",
     borderBottomLeftRadius: 50,
     borderBottomRightRadius: 50,
   },
@@ -52,7 +53,7 @@ const styles = StyleSheet.create({
     paddingTop: 5,
     paddingBottom: 5,
     backgroundColor: "#fcfcfc",
-    borderColor: "orange",
+    borderColor: "#4db853",
     borderWidth: 1,
     borderRadius: 10,
   },
@@ -62,7 +63,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fcfcfc",
     flexDirection: "row",
     justifyContent: "space-evenly",
-    borderColor: "orange",
+    borderColor: "#4db853",
     borderWidth: 1,
     borderRadius: 10,
   },
@@ -85,6 +86,11 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
+  },
+  categoryConteiner: {
+    flexDirection: "row",
+    height: 300,
+    justifyContent: "space-around",
   },
 });
 
@@ -176,7 +182,13 @@ export default Home = ({ route, navigation }) => {
           <Divice name="Dolar Oficial" divice="Oficial" />
           <Divice name="Dolar Blue" divice="Blue" />
         </View>
+        <View style={styles.categoryConteiner}>
+          <BoxCategory icon="arrow-circle-o-down" text="Extract" />
+          <BoxCategory icon="arrow-circle-o-up" text="Deposit" />
+          <BoxCategory icon="dollar" text="History" />
+        </View>
       </ScrollView>
+
       <Button title="Extract" onPress={() => setModalExtractVisible(true)} />
       <Modal
         animationType="fade"
