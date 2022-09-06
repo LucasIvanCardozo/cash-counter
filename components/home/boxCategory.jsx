@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 const styles = StyleSheet.create({
@@ -23,11 +23,15 @@ const styles = StyleSheet.create({
 });
 export default BoxCategory = (props) => {
   return (
-    <View style={styles.conteiner}>
+    <TouchableOpacity
+      activeOpacity={0.6}
+      onPress={props.onPress}
+      style={styles.conteiner}
+    >
       <View style={styles.iconConteiner}>
         <FontAwesome name={props.icon} size={50} color="#8888" />
       </View>
       <Text style={styles.text}>{props.text}</Text>
-    </View>
+    </TouchableOpacity>
   );
 };

@@ -110,6 +110,7 @@ export default Home = ({ route, navigation }) => {
     setCurrentMoney,
   } = useContext(CreateContext);
   const [modalExtractVisible, setModalExtractVisible] = useState(false);
+  const [modalDepositVisible, setModalDepositVisible] = useState(false);
   const [coins, setCoins] = useState(0);
 
   //Tomar valores iniciales si estan en el localStorage
@@ -183,13 +184,20 @@ export default Home = ({ route, navigation }) => {
           <Divice name="Dolar Blue" divice="Blue" />
         </View>
         <View style={styles.categoryConteiner}>
-          <BoxCategory icon="arrow-circle-o-down" text="Extract" />
-          <BoxCategory icon="arrow-circle-o-up" text="Deposit" />
+          <BoxCategory
+            icon="arrow-circle-o-down"
+            text="Extract"
+            onPress={() => setModalExtractVisible(true)}
+          />
+          <BoxCategory
+            icon="arrow-circle-o-up"
+            text="Deposit"
+            onPress={() => setModalDepositVisible(true)}
+          />
           <BoxCategory icon="dollar" text="History" />
         </View>
       </ScrollView>
 
-      <Button title="Extract" onPress={() => setModalExtractVisible(true)} />
       <Modal
         animationType="fade"
         visible={modalExtractVisible}
@@ -198,21 +206,67 @@ export default Home = ({ route, navigation }) => {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalConteiner}>
-            <Text>Hola</Text>
+            <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+              Cuanto deseas extraer?
+            </Text>
             <TextInput
               keyboardType="numeric"
               maxLength={10}
-              placeholder={"how much to extract?"}
+              placeholder={`Puedes hasta $${currentMoney}`}
               onChangeText={(text) => setCoins(text)}
             />
             <Button
               title="Extract"
               onPress={() => {
                 if (coins > 0) {
-                  setData("currentMoney", (currentMoney - coins).toString());
-                  setCurrentMoney((currentMoney - coins).toString());
+                  console.log(coins);
+                  console.log(currentMoney);
+                  if (coins > currentMoney) {
+                    ToastAndroid.show(
+                      "Monto de dinero supera al actual",
+                      ToastAndroid.SHORT
+                    );
+                  } else {
+                    setData("currentMoney", (currentMoney - coins).toString());
+                    setCurrentMoney((currentMoney - coins).toString());
+                    setCoins(0);
+                    setModalExtractVisible(false);
+                  }
+                } else {
+                  ToastAndroid.show(
+                    "Monto de dinero inválido",
+                    ToastAndroid.SHORT
+                  );
+                }
+              }}
+            />
+          </View>
+        </View>
+      </Modal>
+      <Modal
+        animationType="fade"
+        visible={modalDepositVisible}
+        transparent={true}
+        onRequestClose={() => setModalDepositVisible(false)}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalConteiner}>
+            <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+              Cuanto deseas depositar?
+            </Text>
+            <TextInput
+              keyboardType="numeric"
+              maxLength={10}
+              onChangeText={(text) => setCoins(text)}
+            />
+            <Button
+              title="Deposit"
+              onPress={() => {
+                if (coins > 0) {
+                  setData("currentMoney", (currentMoney + coins).toString());
+                  setCurrentMoney((currentMoney + coins).toString());
                   setCoins(0);
-                  setModalExtractVisible(false);
+                  setModalDepositVisible(false);
                 } else {
                   ToastAndroid.show(
                     "Monto de dinero inválido",
